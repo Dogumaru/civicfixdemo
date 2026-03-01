@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # ── PostgreSQL ──
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: civicfix
+      POSTGRES_USER: civicfix
+      POSTGRES_PASSWORD: civicfix
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U civicfix"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── FastAPI Backend ──
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://civicfix:civicfix@db:5432/civicfix
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+      - uploads:/app/uploads
+      - model-cache:/app/app/model
+
+  # ── React Frontend ──
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/src:/app/src
+
+volumes:
+  pgdata:
+  uploads:
+  model-cache:

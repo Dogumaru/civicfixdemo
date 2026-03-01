@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:shadow-md hover:border-gray-200;
+  }
+  .btn-primary {
+    @apply bg-civic-600 text-white px-6 py-2.5 rounded-lg font-medium 
+           transition-all duration-200 hover:bg-civic-700 active:scale-95
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-white text-gray-700 px-6 py-2.5 rounded-lg font-medium border border-gray-200
+           transition-all duration-200 hover:bg-gray-50 active:scale-95;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-low { @apply bg-green-100 text-green-800; }
+  .badge-medium { @apply bg-yellow-100 text-yellow-800; }
+  .badge-high { @apply bg-orange-100 text-orange-800; }
+  .badge-critical { @apply bg-red-100 text-red-800; }
+  .stat-card {
+    @apply card text-center;
+  }
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  border-radius: 0.75rem;
+  z-index: 1;
+}
+
+/* Upload dropzone */
+.dropzone {
+  @apply border-2 border-dashed border-gray-300 rounded-xl p-8 text-center
+         transition-all duration-200 cursor-pointer;
+}
+.dropzone:hover,
+.dropzone.active {
+  @apply border-civic-500 bg-civic-50;
+}
+
+/* Animations */
+.animate-count {
+  animation: countUp 0.6s ease-out forwards;
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Classification result card */
+.classification-result {
+  @apply card animate-slide-up;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+/* Heat pulse for severity */
+.severity-pulse {
+  animation: severityPulse 2s infinite;
+}
+
+@keyframes severityPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+}
